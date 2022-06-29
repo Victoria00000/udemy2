@@ -5,8 +5,10 @@ const rootReducer = combineReducers({
 
 });
 
-const middleware = { thunkMiddleware };
+const middleware = [thunkMiddleware];
 
-export const store = createStore(rootReducer,
-    compose(applyMiddleware(...middleware), window.___REDUX_DEVTOOLS_EXTENSION__ && window.___REDUX_DEVTOOLS_EXTENSION__()));
+const store = createStore(rootReducer,
+    compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+);
 
+export default store; 
