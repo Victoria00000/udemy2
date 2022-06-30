@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { userRegister } from '../redux/actions/authAction';
 
 export const Register = () => {
+
+  const dispatch = useDispatch();
 
   const [state, setState] = useState({
     userName: '',
@@ -10,6 +14,7 @@ export const Register = () => {
     confirmPassword: '',
     image: ''
   });
+  const [loadImage, setLoadImage] = useState('');
 
   const inputHandler = evt => {
     setState({
@@ -24,10 +29,23 @@ export const Register = () => {
         ...state,
         [evt.target.name]: evt.target.files[0]
       });
+    const reader = new FileReader();
+    reader.onload = () => {
+      setLoadImage(reader.result);
+    };
+    reader.readAsDataURL(evt.target.files[0]);
   };
 
   const submitRegister = evt => {
+    const { userName, email, password, confirmPassword, image } = state;
     evt.preventDefault();
+    const formData = new formData();
+    formData.append('userName', userName);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('confirmPassword', confirmPassword);
+    formData.append('image', image);
+    dispatch(userRegister);
     console.log(state);
   };
 
@@ -66,6 +84,7 @@ export const Register = () => {
               <div className='form-group'>
                 <div className='file-image'>
                   <div className='image'>
+                    {loadImage ? <img src={loadImage} /> : ''}
                   </div>
                   <div className='file'>
                     <label htmlFor='image'> Select image </label>
